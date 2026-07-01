@@ -30,14 +30,19 @@ if st.button("Generar eBook"):
     texto = generar_libro(prompt)
 
     pdf = FPDF()
-    pdf.add_page()
-    pdf.set_font("Arial", size=12)
+pdf.add_page()
+pdf.set_auto_page_break(auto=True, margin=15)
+pdf.set_font("Arial", size=12)
 
-    pdf.multi_cell(0, 10, f"Autor: {autor}\n\n")
-    pdf.multi_cell(0, 10, f"Dedicatoria:\n{dedicatoria}\n\n")
-    pdf.multi_cell(0, 10, texto)
+autor_limpio = autor.encode("latin-1", "ignore").decode("latin-1")
+dedicatoria_limpia = dedicatoria.encode("latin-1", "ignore").decode("latin-1")
+texto_limpio = texto.encode("latin-1", "ignore").decode("latin-1")
 
-    pdf.output("ebook.pdf")
+pdf.multi_cell(0, 10, f"Autor: {autor_limpio}\n\n")
+pdf.multi_cell(0, 10, f"Dedicatoria:\n{dedicatoria_limpia}\n\n")
+pdf.multi_cell(0, 10, texto_limpio)
+
+pdf.output("ebook.pdf")
 
     st.success("eBook generado")
     st.download_button("Descargar PDF", open("ebook.pdf", "rb"), "ebook.pdf")
